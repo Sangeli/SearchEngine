@@ -61,6 +61,7 @@ public class SearchEngine {
         
         assertEquals(Root.GetWordArray()[1], "b");
         assertEquals(end2.GetWordArray()[0], "b");
+        
     }
     
 }
