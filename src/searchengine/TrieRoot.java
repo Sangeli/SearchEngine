@@ -19,6 +19,7 @@ public class TrieRoot extends TrieNode {
     public Map<String, String[]> GetWordArrayByNextChar (String WordStart) {
         TrieNode End = GetEndNode(WordStart);
         return End.GetWordArrayByNextChar();
+        //test231
     }
     
     
