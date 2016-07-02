@@ -41,4 +41,12 @@ public class WordResult {
         this.Prev = Prev;
     }
     
+    public String toString() {
+        return this.Word + " : " + this.Weight;
+    }
+    
+    public void PrintDebug() {
+        System.out.println(this + ", Prev: " + this.GetPrev() + ", Next: " + this.GetNext());
+    }
+    
 }

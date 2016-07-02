@@ -11,7 +11,7 @@ import java.util.*;
  * @author StephenCefali
  */
 public class TrieNode {
-    private static int MaxWords = 6;
+    public static int MaxWords = 6;
     protected int Depth;
     private Map<String, TrieChild> Children;
     private int CurrWordCount;
@@ -30,15 +30,23 @@ public class TrieNode {
     
     
     public void SwapResults(WordResult HigherResult, WordResult LowerResult) throws IllegalArgumentException {
-        //Check to make sure that these results are adjacent
-        //with HigherResult being LowerResults next
-        //and HigherResult actually being higher
-        if (HigherResult.GetPrev() != LowerResult) {
-            throw new IllegalArgumentException();
-        }
+        
+        //Check HigherResult actually being higher
         if (HigherResult.GetWeight() <= LowerResult.GetWeight()) {
             throw new IllegalArgumentException();
         }
+        
+        
+        //if LowerResult not at the end, check to see if linked adjacently
+        if (LowerResult != this.LPopWord) {
+            if (HigherResult.GetPrev() != LowerResult) {
+                throw new IllegalArgumentException();
+            }
+            if (LowerResult.GetNext() != HigherResult) {
+                throw new IllegalArgumentException();
+            }
+        }
+        
         
         //Keep a temp
         WordResult temp = LowerResult.GetPrev();
@@ -55,13 +63,13 @@ public class TrieNode {
         if (HigherResult.GetPrev() == null) {
             this.MPopWord = HigherResult;
         } else {
-            HigherResult.GetPrev().GetNext() = HigherResult;
+            HigherResult.GetPrev().SetNext(HigherResult);
         }
         
         if (LowerResult.GetNext() == null) {
             this.LPopWord = LowerResult;
         } else {
-            HigherResult.GetNext().SetPrev(HigherResult);
+            LowerResult.GetNext().SetPrev(LowerResult);
         }
     }
     
@@ -83,6 +91,15 @@ public class TrieNode {
             CurrWord = CurrWord.GetNext();
         }
         return WordArray;
+    }
+    
+    public void PrintWordArray() {
+        WordResult curr = this.MPopWord;
+        for (int i = 0; i < this.CurrWordCount; i ++) {
+            System.out.println(curr);
+            curr = curr.GetNext();
+        }
+        
     }
     
     public TrieNode GetEndNode(String WordStart) {
@@ -135,9 +152,14 @@ public class TrieNode {
             prev = curr.GetPrev();
             
             //keep pushing the word back until its in order
-            while (prev != null & curr.GetWeight() > prev.GetWeight()) {
-                SwapResults(curr, prev);
-                prev = curr.GetPrev();
+            while (prev != null){
+                if(curr.GetWeight() > prev.GetWeight()){
+                    SwapResults(curr, prev);
+                    prev = curr.GetPrev();
+                }
+                else {
+                    break;
+                }
             }
         }
         else {
@@ -162,17 +184,45 @@ public class TrieNode {
             }
             //Otherwise check to see if it would fit
             else {
-                while (prev != null & curr.GetWeight() > prev.GetWeight()) {
-                    //swap the nodes
-                    SwapResults(curr, prev);
-                    //if curr is now end node after swapping,
-                    //add curr and remove prev
-                    if (curr == this.LPopWord) {
-                        this.Words.remove(prev.GetWord());
-                        this.Words.put(curr.GetWord(), curr);
+                while (prev != null){
+                    if(curr.GetWeight() > prev.GetWeight()){
+                        //if prev was at the end, remove it
+                        //and replace it with curr
+                        if (prev == this.LPopWord) {
+                            this.Words.remove(prev.GetWord());
+                            this.Words.put(curr.GetWord(), curr);
+                            this.LPopWord = curr;
+                            curr.SetPrev(prev.GetPrev());
+                            prev.GetPrev().SetNext(curr);
+                        }
+                        //otherwise swap
+                        else {
+                            SwapResults(curr, prev);
+                        }
+                        
+                        
+                        prev = curr.GetPrev();
+                    }
+                    else {
+                        break;
                     }
                 }
             }
+        }
+    }
+    
+    public WordResult GetLPopWord(){
+        return this.LPopWord;
+    }
+    
+    public WordResult GetMPopWord(){
+        return this.MPopWord;
+    }
+    
+    public void PrintWordList(){
+        WordResult curr = this.MPopWord;
+        while (curr != null) {
+            curr = curr.GetNext();
         }
     }
 }
