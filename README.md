@@ -1,4 +1,8 @@
 ﻿# SearchEngine
+
+This program lays the foundation of an autocomplete program run on a server. Whenever the user types in a word, the server gives a list of suggestions based off the frequency of the word with the prefix. The underlying datastructure is a trie.
+
+
 To run the SearchEngine do the following
 
 1. Clone the repository somewhere
