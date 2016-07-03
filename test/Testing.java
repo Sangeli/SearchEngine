@@ -127,7 +127,7 @@ public class Testing {
     }
     
     @Test
-    public void TestReadFile() {
+    public void TestReadDragons() {
         String FileName = "AClashOfKingsPrologue.txt";
         TrieRoot Root = new TrieRoot();
         Root.ReadFile(FileName);

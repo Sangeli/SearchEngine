@@ -4,9 +4,8 @@
  * and open the template in the editor.
  */
 package searchengine;
-import java.io.BufferedReader;
-import java.io.FileReader;
-import java.util.Map;
+import java.io.*;
+import java.util.*;
 import org.junit.Test;
 import static org.junit.Assert.*;
 
@@ -16,11 +15,26 @@ import static org.junit.Assert.*;
  */
 public class SearchEngine {
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String[] args) {
         
+        TrieRoot Root = new TrieRoot();
+        String FileName = "wordsEn.txt";
+        
+        if ( Root.ReadFile(FileName) == false) {
+            return;
+        }
+        
+        Console c = System.console();
+        if (c == null) {
+            System.out.println("Must run from command line");
+            return;
+        }
+        String WordStart = c.readLine("Enter your search sub string: ");
+        
+        String[] WordArray = Root.GetWordArray(WordStart);
+        for (String FoundWord: WordArray) {
+            System.out.println(FoundWord);
+        }
         
     }
     

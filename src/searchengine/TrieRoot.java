@@ -32,7 +32,13 @@ public class TrieRoot extends TrieNode {
     }
     
     
-    public void ReadFile(String FileName){
+    public String[] GetWordArray(String WordStart) {
+        //always lower case
+        TrieNode End = GetEndNode(WordStart.toLowerCase());
+        return End.GetWordArray();
+    }
+    
+    public boolean ReadFile(String FileName){
         Pattern word_pattern = Pattern.compile("(\\w+)");
         Matcher word_matcher;
         String word;
@@ -51,11 +57,14 @@ public class TrieRoot extends TrieNode {
             }
         }
         catch(FileNotFoundException ex) {
-            System.out.println("Unable to open file '" + FileName + "'");                
+            System.out.println("Unable to open file '" + FileName + "'");  
+            return false;
         }
         catch(IOException ex) {
-            System.out.println("Error reading file '" + FileName + "'");            
+            System.out.println("Error reading file '" + FileName + "'"); 
+            return false;
         }
+        return true;
     }
     
     
